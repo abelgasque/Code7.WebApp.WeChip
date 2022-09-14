@@ -1,0 +1,225 @@
+<h1>Ofertas</h1>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="ui-g-12 ui-md-4 ui-fluid">
+            <span class="ui-float-label">
+                <p-dropdown name="nome" [options]="listaClientes"
+                [showClear]="true" appendTo="body" [autoDisplayFirst]="false" 
+                optionLabel="nome" [(ngModel)]="clienteFiltro"
+                (onShow)="carregarClientes()"></p-dropdown> 
+                 <label>Nome</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-4 ui-fluid">
+            <span class="ui-float-label">
+                <p-dropdown name="cpf" [options]="listaClientes"
+                [showClear]="true" appendTo="body" [autoDisplayFirst]="false" 
+                optionLabel="cpf" [(ngModel)]="clienteFiltro"
+                (onShow)="carregarClientes()"></p-dropdown> 
+                 <label>CPF</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-2">
+            <button pButton type="button" label="Pesquisar" icon="pi pi-search"
+            (click)="getClientById()"></button>
+        </div>
+    </div>
+    <form class="ui-g-12" autocomplete="off" #f="ngForm" (ngSubmit)="editarCliente()">
+        <div class="ui-g-12 ui-fluid">
+            <h3>Cliente</h3>
+            <div class="ui-g-12 ui-md-4">
+                <label>Nome *</label>
+                <input pInputText type="text" name="nome" [(ngModel)]="cliente.nome"
+                  minlength="5" maxlength="50" required>   
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <label>CPF</label>
+                <input pInputText type="text" name="cpf" [(ngModel)]="cliente.cpf" disabled>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <label>Telefone *</label>
+                <p-inputMask mask="(99) 9999-9999" name="telefone" [(ngModel)]="cliente.telefone"
+                required></p-inputMask> 
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <label>Crédito</label>
+                <input pInputText  currencyMask type="text" name="credito" [(ngModel)]="cliente.credito" disabled> 
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <label>Status</label>
+                <input pInputText type="text" name="status" [(ngModel)]="cliente.status.descricao" disabled> 
+            </div>
+        </div>
+        <div class="ui-g-12 ui-fluid">
+            <div class="ui-g-12">
+                <h1>Endereço</h1>
+                <div class="ui-g-6 ui-md-2">
+                    <label>CEP</label>
+                    <div class="ui-inputgroup">
+                        <p-inputMask mask="99999-999" name="cep" [(ngModel)]="cliente.endereco.cep"></p-inputMask>
+                        <button type="button" pButton icon="pi pi-search" 
+                        (click)="getEnderecoPorCep()"></button>
+                    </div>
+                </div>  
+                <div class="ui-g-6 ui-md-1">
+                    <label>Estado</label>
+                    <input pInputText type="text" name="estado" [(ngModel)]="cliente.endereco.estado" disabled>
+                </div>
+                <div class="ui-g-6 ui-md-2 ui-fluid">
+                    <label>Cidade</label>
+                    <input pInputText type="text" name="cidade" [(ngModel)]="cliente.endereco.cidade" disabled> 
+                </div>
+                <div class="ui-g-6 ui-md-2 ui-fluid">
+                    <label>Bairro</label>
+                    <input pInputText type="text" name="bairro" [(ngModel)]="cliente.endereco.bairro" disabled> 
+                </div>
+                <div class="ui-g-6 ui-md-2 ui-fluid">
+                    <label>Complemento</label>
+                    <input pInputText type="text" name="complemento" [(ngModel)]="cliente.endereco.complemento">
+                </div>
+                <div class="ui-g-6 ui-md-2 ui-fluid">
+                    <label>Número</label>
+                    <input pInputText type="text" name="numero" [(ngModel)]="cliente.endereco.numero">
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <button pButton type="submit" label="Editar" icon="pi pi-check"
+            [disabled]="!f.valid"></button>
+            <button type="button" pButton class="ui-button-rounded" icon="pi pi-plus" label="Nova oferta"
+            (click)="novaOferta()"></button>
+        </div>
+    </form>
+    <div class="ui-g-12">
+        <p-table [value]="listaProdutos">
+            <ng-template pTemplate="caption">  
+                <div class="ui-helper-clearfix" style="text-align: center">
+                    Lista de produtos
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Descricao</th>
+                    <th>Preço</th>
+                    <th>Tipo</th>
+                    <th>Código do Produto</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td>{{rowData.descricao}}</td>
+                    <td>{{rowData.preco}}</td>
+                    <td>{{rowData.tipo}}</td>
+                    <td>{{rowData.codigo}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="ui-g-12">
+        <p-table [value]="listaStatus">
+            <ng-template pTemplate="caption">  
+                <div class="ui-helper-clearfix" style="text-align: center">
+                    Lista de status
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Descricao</th>
+                    <th>Finaliza Cliente</th>
+                    <th>Contabiliza Venda</th>
+                    <th>Código do Produto</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td>{{rowData.descricao}}</td>
+                    <td>{{rowData.finalizaCliente}}</td>
+                    <td>{{rowData.contabilizarVenda}}</td>
+                    <td>{{rowData.codigo}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-dialog header="Cadastro de oferta" [(visible)]="display" [modal]="true" 
+[responsive]="true" [style]="{width: '95%'}">
+    <p-toast [style]="{marginTop: '80px'}" position="top-center"></p-toast>
+    <div class="ui-g ui-fluid">
+        <form class="ui-g-12" #form="ngForm" (ngSubmit)="salvarOferta()">
+            <div class="ui-g-6">
+                <label>Cliente</label>
+                <p-dropdown name="nome" [options]="listaClientes"
+                [showClear]="true" appendTo="body" [autoDisplayFirst]="false" 
+                optionLabel="nome" [(ngModel)]="oferta.cliente"
+                (onShow)="carregarClientes()" required></p-dropdown> 
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-6">
+                <label>Descrição</label>
+                <input pInputText type="text" name="descricao" 
+                [(ngModel)]="oferta.produto.descricao" required>
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-6 ui-md-2">
+                <label>Preço</label>
+                <input pInputText currencyMask   type="text" name="preco" 
+                [(ngModel)]="oferta.produto.preco" required>
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-6  ui-md-2">
+                <label>Tipo</label>
+                <p-selectButton name="tipo"[options]="tiposProduto" 
+                [(ngModel)]="oferta.produto.tipo" required></p-selectButton>
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-6  ui-md-2">
+                <label>Código</label>
+                <input pInputText type="text" name="codigo" 
+                [(ngModel)]="oferta.produto.codigo" required>
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-6  ui-md-2">
+                <button type="button" pButton icon="pi pi-check" 
+                (click)="abrirDisplaySelecaoProduto()" label="Selecione produto cadastrado"
+                [disabled]="listaProdutosCadastro.length===0?true:false"></button>
+            </div>
+        </form> 
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="salvarOferta()" label="Salvar"
+        [disabled]="!form.valid"></button>
+        <button type="button" pButton icon="pi pi-close" label="Limpar"
+        (click)="limparForm()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Selecione produto da oferta" [(visible)]="displayProduto" [modal]="true" 
+[responsive]="true" [style]="{width: '95%'}">
+    <p-table [value]="listaProdutosCadastro"  selectionMode="single" 
+    [(selection)]="produtoSelecao" dataKey="id">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Descricao</th>
+                <th>Preço</th>
+                <th>Tipo</th>
+                <th>Código do Produto</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData >
+            <tr [pSelectableRow]="rowData">
+                <td>{{rowData.descricao}}</td>
+                <td>{{rowData.preco}}</td>
+                <td>{{rowData.tipo}}</td>
+                <td>{{rowData.codigo}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="salvarSelecao()" label="Salvar"></button>
+        <button type="button" pButton icon="pi pi-close" (click)="cancelarSelecao()" 
+        label="Cancelar" class="ui-button-secondary"></button>
+    </p-footer>
+</p-dialog>

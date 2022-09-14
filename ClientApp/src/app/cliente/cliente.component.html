@@ -1,0 +1,40 @@
+<h1>Cadastro cliente</h1>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <form class="ui-g-12" #f="ngForm" autocomplete="off" (ngSubmit)="salvarCliente()">
+            <div class="ui-g-12 ui-md-4 ui-fluid">
+                <span class="ui-float-label">
+                    <input pInputText type="text" name="nome" [(ngModel)]="cliente.nome"  
+                    required minlength="5" maxlength="50"> 
+                    <label>Nome</label>
+                </span>
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-fluid">
+                <span class="ui-float-label">
+                    <p-inputMask mask="999.999.999-99" name="cpf" [(ngModel)]="cliente.cpf"></p-inputMask>
+                    <label>CPF</label>
+                </span>
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-fluid">
+                <span class="ui-float-label">
+                    <input pInputText currencyMask name="credito" [(ngModel)]="cliente.credito"> 
+                    <label>Crédito</label>
+                </span>
+                <small>Campo opcional</small>
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-fluid">
+                <span class="ui-float-label">
+                    <p-inputMask mask="(99) 9999-9999" name="telefone" [(ngModel)]="cliente.telefone"></p-inputMask> 
+                    <label>Telefone</label>
+                </span>
+                <small>Campo obrigatório</small>
+            </div>
+            <div class="ui-g-12">
+                <button pButton type="submit" label="Salvar" icon="pi pi-check"
+                [disabled]="!f.valid"></button>
+            </div>
+        </form>
+    </div>
+</div>
